@@ -12,6 +12,7 @@ public partial class Category
     [Key]
     public int CategoryId { get; set; }
 
+    [Required]
     [StringLength(15)]
     public string CategoryName { get; set; } = null!;
 

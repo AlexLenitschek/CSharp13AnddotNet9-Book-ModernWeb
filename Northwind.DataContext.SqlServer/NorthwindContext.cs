@@ -84,12 +84,15 @@ public partial class NorthwindContext : DbContext
             // Because we want to fail faster. Default is 15 seconds.
             builder.ConnectTimeout = 3;
 
+            // Hier wird Encrypt=False gesetzt
+            builder.Encrypt = false;
+
             // If using Windows Integrated authentication.
             builder.IntegratedSecurity = true;
 
             // If using SQL Server authentication.
-            // builder.UserId = Environment.GetEnvironmentVariable("MY_SQL_USR");
-            // builder.Password = Environment.GetEnvironmentVariable("MY_SQL_PWD");
+            //builder.UserID = Environment.GetEnvironmentVariable("MY_SQL_USR");
+            //builder.Password = Environment.GetEnvironmentVariable("MY_SQL_PWD");
 
             optionsBuilder.UseSqlServer(builder.ConnectionString);
 
