@@ -1,5 +1,14 @@
+using Northwind.Web.Components; // To use App.
+
+#region Configure the web server host and services.
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRazorComponents();
+
 var app = builder.Build();
+
+#endregion
 
 #region Configure the HTTP pipeline and routes
 
@@ -10,9 +19,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAntiforgery();
+
 app.UseDefaultFiles(); // index.html, default.html, and so on. // THIS CALL MUST BE BEFORE THE NEXT TWO!
 //app.MapStaticAssets(); // .NET9 or later.
 app.UseStaticFiles(); // .NET8 or earlier.
+
+app.MapRazorComponents<App>();
 
 app.MapGet("/env", () => $"Environment is {app.Environment.EnvironmentName}");
 
