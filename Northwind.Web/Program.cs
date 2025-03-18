@@ -1,10 +1,12 @@
 using Northwind.Web.Components; // To use App.
+using Northwind.EntityModels; // To use AddNorthwindContext method.
 
 #region Configure the web server host and services.
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents();
+builder.Services.AddNorthwindContext();
 
 var app = builder.Build();
 
@@ -17,16 +19,51 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+#region Implementing an anonymous inline delegate as middleware
+// Implementing an anonymous inline delegate as middleware
+// to intercept HTTP requests and responses.
+app.Use(async (HttpContext context, Func<Task> next) =>
+{
+    RouteEndpoint? rep = context.GetEndpoint() as RouteEndpoint;
+
+    if (rep is not null)
+    {
+        WriteLine($"Endpoint name: {rep.DisplayName}");
+        WriteLine($"Endpoint route pattern: {rep.RoutePattern.RawText}");
+    }
+
+    if (context.Request.Path == "/bonjour")
+    {
+        // In the case of a match on URL path, this becomes a terminating
+        // delegate that returns so does not call the next delegate.
+        await context.Response.WriteAsync("Bonjour Monde!");
+        return;
+    }
+
+    // We could modify the request before calling the next delegate.
+    await next();
+
+    // We could modify the response after calling the next delegate.
+});
+#endregion
+
+app.UseHttpsRedirection(); // Redirect from Http to Https with 308 response.
 
 app.UseAntiforgery();
 
-app.UseDefaultFiles(); // index.html, default.html, and so on. // THIS CALL MUST BE BEFORE THE NEXT TWO!
+app.UseDefaultFiles(); // enables default file mapping on the current path to identify default files
+                       // like index.html, default.html, and so on. // THIS CALL MUST BE BEFORE THE NEXT TWO!
 //app.MapStaticAssets(); // .NET9 or later.
-app.UseStaticFiles(); // .NET8 or earlier.
+app.UseStaticFiles(); // .NET8 or earlier. Adds middleware that looks in wwwroot for static files to return in the HTTP response.
 
-app.MapRazorComponents<App>();
+//app.MapRazorPages(); // Adds middleware that will map URL paths such as `/suppliers`
+                       // to a Razor Page file in the `/Pages` folder named `suppliers.cshtml`
+                       // and return the results as the HTTP response.
+app.MapRazorComponents<App>(); // Same but for blazor components instead of razor pages.
 
+
+// MapGet(): Adds middleware that will map URL paths such as `/hello` to an inline delegate
+// that writes plain text directly to the HTTP response.
 app.MapGet("/env", () => $"Environment is {app.Environment.EnvironmentName}");
 
 app.MapGet("/data", () => Results.Json(new
