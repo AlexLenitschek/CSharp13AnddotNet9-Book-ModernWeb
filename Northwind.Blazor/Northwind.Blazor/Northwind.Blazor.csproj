@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -9,6 +9,15 @@
   <ItemGroup>
     <ProjectReference Include="..\Northwind.Blazor.Client\Northwind.Blazor.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Northwind.DataContext.SqlServer\Northwind.DataContext.SqlServer.csproj" />
+    <ProjectReference Include="..\..\Northwind.Blazor.Services\Northwind.Blazor.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Northwind.EntityModels" />
   </ItemGroup>
 
 </Project>
