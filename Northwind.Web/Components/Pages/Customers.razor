@@ -1,0 +1,66 @@
+﻿@inject NorthwindContext _db
+@page "/customers"
+@code {
+	// public IEnumerable<string?> Companies { get; set; } = new[] { "Alpha Co", "Beta Limited", "Gamma Corp" }; // Test using Hardcoded values.
+	public IEnumerable<Customer> CustomerNames { get; set; }
+
+	protected override void OnInitialized()
+	{
+		CustomerNames = _db.Customers
+		.OrderBy(c => c.Country)
+		.ThenBy(c => c.CompanyName);
+	}
+}
+<div class="row">
+	<h1 class="display-2">Customers</h1>
+	<table class="table">
+		<thead class="thead-inverse">
+			<tr>
+				<th>Company Name</th>
+				<th>Customer ID</th>
+				<th>City</th>
+				<th>Country</th>
+				<th>Phone</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (CustomerNames is not null)
+			{
+				@foreach (Customer c in CustomerNames)
+				{
+					<tr>
+						<td><a href="/customers/@c.CustomerId">@c.CompanyName</a></td>
+						<td>@c.CustomerId</td>
+						<td>@c.City</td>
+						<td>@c.Country</td>
+						<td>@c.Phone</td>
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+</div>
+
+<!-- Test using hardcoded values
+<div class="row">
+	<h1 class="display-2">Suppliers</h1>
+	<table class="table">
+		<thead class="thead-inverse">
+			<tr>
+				<th>Company Name</th>
+			</tr>
+		</thead>
+		<tbody>
+@if (Companies is not null)
+{
+@foreach(string name in Companies)
+{
+					<tr>
+						<td>@name</td>
+					</tr>
+}
+}
+		</tbody>
+	</table>
+</div>
+-->

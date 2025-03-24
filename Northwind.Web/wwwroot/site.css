@@ -2,3 +2,8 @@
     color: darkcyan;
     font-style: italic;
 }
+
+h2 {
+    color: darkred;
+    font-style: normal;
+}
