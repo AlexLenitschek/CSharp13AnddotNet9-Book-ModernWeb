@@ -9,8 +9,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddNorthwindContext(
-  relativePath: @"..\..");
+builder.Services.AddNorthwindContext();
+//builder.Services.AddNorthwindContext(relativePath: @"..\..");
 
 builder.Services.AddTransient<INorthwindService,
   NorthwindServiceServerSide>();
