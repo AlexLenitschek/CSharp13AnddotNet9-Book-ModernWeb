@@ -1,0 +1,59 @@
+﻿@page "/timestable/{Number:int?}"
+@page "/timestable/{Number:int}/{Size:int?}"
+
+<h2>Timestable of @Number</h2>
+
+@if (Number is 0)
+{
+    <div>You must Enter a Number to the Link like: /6</div>    
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> * </th>
+            @for (var i = 1; i <= Number; i++)
+            {
+                <th>@i</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (var j = 1; j <= Size; j++)
+        {
+            <tr>
+                <th>@j</th>
+                @for (var k = 1; k <= Number; k++)
+                {
+                    <td>@Multiplied(j,k)</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@code {
+    [Parameter]
+    public int Number { get; set; } = 6;
+
+    [Parameter]
+    public int Size { get; set; } = 12;
+
+    protected override void OnInitialized()
+    {
+        Size = 12;
+    }
+
+    public int Multiplied(int j, int k)
+    {
+        return j * k;    
+    }
+
+    private void Submit()
+    {
+        
+    }
+}
