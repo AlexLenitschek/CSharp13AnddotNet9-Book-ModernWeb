@@ -42,9 +42,16 @@
     [Parameter]
     public int Size { get; set; } = 12;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        Size = 12;
+		if (Number == 0)
+        {
+			Number = 1;
+		}
+        if (Size == 0)
+        {
+            Size = 12;
+        }
     }
 
     public int Multiplied(int j, int k)
