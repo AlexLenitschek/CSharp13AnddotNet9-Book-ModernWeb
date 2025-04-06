@@ -1,5 +1,6 @@
 using Northwind.EntityModels; // To use AddNorthwindContext method.
 using Microsoft.Extensions.Caching.Hybrid; // To use HybridCacheEntryOptions.
+using Northwind.WebApi.Repositories; // To use ICustomerRepository.
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.AddHybridCache(options =>
     };
 });
 
+// Registers the CustomerRepository for use at runtime as a scoped dependency.
+// !!! Can only use scoped dependencies inside other scoped dependencies !!!.
+// Database context is also registered as a scoped dependency. Therefore cannot register repo as singleton.
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,5 +37,7 @@ app.UseHttpsRedirection();
 app.MapGet("/weatherforecast/{days:int?}",
     (int days = 5) => GetWeather(days))
     .WithName("GetWeatherForecast");
+
+app.MapCustomers();
 
 app.Run();

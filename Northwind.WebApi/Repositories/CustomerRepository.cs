@@ -47,6 +47,7 @@ public class CustomerRepository : ICustomerRepository
         // Add to database using EF Core.
         EntityEntry<Customer> added = await _db.Customers.AddAsync(c);
         int affected = await _db.SaveChangesAsync();
+
         if (affected == 1)
         {
             // If saved to database then store in cache.
