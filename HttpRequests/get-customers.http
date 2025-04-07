@@ -1,0 +1,24 @@
+### Configure a variable for the web service base address.
+@base_address = https://localhost:5151/customers/
+
+### Make a GET request to the base address.
+GET {{base_address}}
+
+### Get customers in Germany.
+GET {{base_address}}in/Germany
+
+### Get customers in USA.
+GET {{base_address}}in/USA
+
+### Get Alfreds Futterkiste
+GET {{base_address}}ALFKI
+
+### Get a non-existing customer.
+GET {{base_address}}abcxy
+
+### Get the environment variable.
+### These do not work as they are not set. the second one is an example what it would
+### look like if you'd have saved a secret value like a password to connect to a SQL Server
+### that must be kept hidden if you for example commit this to a GitHub repository.
+{{$processEnv [%]envVarName}}
+{{$processEnv MY_SQL_PWD}}

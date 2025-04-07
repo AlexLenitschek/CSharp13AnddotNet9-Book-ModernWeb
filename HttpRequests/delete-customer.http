@@ -1,0 +1,6 @@
+### Configure a variable for the web service base address.
+@base_address = https://localhost:5151/customers/
+
+### Make a DELETE request to the base address.
+DELETE {{base_address}}abcxy
+Content-Type: application/json
