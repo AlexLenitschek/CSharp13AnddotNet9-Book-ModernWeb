@@ -4,6 +4,8 @@ using Northwind.WebApi.Repositories; // To use ICustomerRepository.
 using Microsoft.AspNetCore.HttpLogging; // To use HttpLoggingFields.
 using System.Runtime.InteropServices; // To use RuntimeInformation
 
+const string corsPolicyName = "allowWasmClient";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -40,6 +42,15 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 }
 // builder.Logging.AddEventLog(); Only supported by Windows and throws warning. Above removes warning.
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicyName,
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:5152", "https://localhost:5153");
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,6 +62,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpLogging();
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsPolicyName);
 
 app.MapGet("/weatherforecast/{days:int?}",
     (int days = 5) => GetWeather(days))
